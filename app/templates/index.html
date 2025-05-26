@@ -1,1 +1,9 @@
-<h1>Hello World!</h1>
+{% extends "base.html" %} {% block head %} {{ super() }} {% endblock %} {% block
+content %}
+<h1>Hello!</h1>
+<p>Welcome to your push-ups logger</p>
+<p>
+  This website implements basic CRUD Functionality and user authentication
+  features using Flask
+</p>
+{% endblock %}
