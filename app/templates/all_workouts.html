@@ -28,7 +28,7 @@ content %}
         </tr>
       </thead>
       <tbody>
-        {% if workouts %} {% for workout in workouts %}
+        {% if workouts %} {% for workout in workouts.items %}
         <tr>
           <td scope="row">
             {{workout.date_posted.strftime('%H:%M:%S %d/%m/%Y ')}}
@@ -53,6 +53,41 @@ content %}
         {% endfor %} {% endif %}
       </tbody>
     </table>
+    <nav>
+      <ul class="pagination justify-content-center">
+        {% if workouts.has_prev %}
+        <li class="page-item">
+          <a
+            class="page-link"
+            href="{{ url_for('main.all_workouts', page=workouts.prev_num) }}"
+            >Previous</a
+          >
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">Previous</span>
+        </li>
+        {% endif %} {% for p in range(1, workouts.pages + 1) %}
+        <li class="page-item {% if p == workouts.page %}active{% endif %}">
+          <a class="page-link" href="{{ url_for('main.all_workouts', page=p) }}"
+            >{{ p }}</a
+          >
+        </li>
+        {% endfor %} {% if workouts.has_next %}
+        <li class="page-item">
+          <a
+            class="page-link"
+            href="{{ url_for('main.all_workouts', page=workouts.next_num) }}"
+            >Next</a
+          >
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">Next</span>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
   </div>
 </div>
 {% endblock %}

@@ -37,12 +37,15 @@ def new_workout_post():
 
     return redirect(url_for('main.all_workouts'))
 
-
 @main.route("/all_workouts")
 @login_required
 def all_workouts():
+    page = request.args.get('page', 1, type=int)
+    per_page = 4
+
     user = User.query.filter_by(email=current_user.email).first_or_404()
-    workouts = user.workouts
+
+    workouts = Workout.query.filter_by(author=user).paginate(page=page, per_page=per_page)
 
     return render_template("all_workouts.html", workouts=workouts, user=user)
 
