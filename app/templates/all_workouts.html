@@ -1,0 +1,33 @@
+{% extends "base.html" %} {% block head %} {{ super() }} {% endblock %} {% block
+content %}
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Table of Workouts</h5>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Performed At</th>
+          <th scope="col">Number of Push-ups</th>
+          <th scope="col">Comment</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if workouts %} {% for workout in workouts %}
+        <tr>
+          <td scope="row">
+            {{workout.date_posted.strftime('%H:%M:%S %d/%m/%Y ')}}
+          </td>
+          <td>{{workout.pushups}}</td>
+          <td>{{workout.comment}}</td>
+          <td>
+            <a class="btn btn-primary me-3" role="button" href="#">Edit</a>
+            <a class="btn btn-danger" role="button" href="#">Delete</a>
+          </td>
+        </tr>
+        {% endfor %} {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
