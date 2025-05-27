@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, url_for, redirect
+from flask import Blueprint, render_template, request, url_for, redirect, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required
 from .models import User
@@ -20,13 +20,15 @@ def signup_post():
     user = User.query.filter_by(email=email).first()
 
     if user:
-        print("User already exists!")
+        flash('User already exists!', 'danger')
         return redirect(url_for('auth.signup'))
 
     new_user = User(email=email, name=name, password=generate_password_hash(password, method='pbkdf2:sha256'))
     
     db.session.add(new_user)
     db.session.commit()
+
+    flash('You have signed up successfully!', 'primary')
 
     return redirect(url_for('auth.login'))
 
@@ -45,7 +47,7 @@ def login_post():
     user = User.query.filter_by(email=email).first()
 
     if not user or not check_password_hash(user.password, password):
-        print("Email or password is NOT valid!")
+        flash("Your email or password is NOT valid!", "danger")
         return redirect(url_for('auth.login'))
     
     login_user(user=user, remember=remember)

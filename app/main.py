@@ -1,6 +1,6 @@
 from .models import Workout, User
 from . import db
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user
 
 main = Blueprint("main", __name__)
@@ -33,6 +33,8 @@ def new_workout_post():
     db.session.add(workout)
     db.session.commit()
 
+    flash("Your workout has been added!", "primary")
+
     return redirect(url_for('main.all_workouts'))
 
 
@@ -56,6 +58,8 @@ def update_workout(workout_id):
 
         db.session.commit()
 
+        flash("Your workout has been updated!", "success")
+
         return redirect(url_for('main.all_workouts'))
 
     return render_template('update_workout.html', workout=workout)
@@ -68,5 +72,7 @@ def delete_workout(workout_id):
 
     db.session.delete(workout)
     db.session.commit()
+
+    flash("Your workout has been deleted!", "danger")
 
     return redirect(url_for('main.all_workouts'))
