@@ -43,3 +43,30 @@ def all_workouts():
     workouts = user.workouts
 
     return render_template("all_workouts.html", workouts=workouts, user=user)
+
+
+@main.route("/workout/<int:workout_id>/update", methods=['GET', 'POST'])
+@login_required
+def update_workout(workout_id):
+    workout = Workout.query.get_or_404(workout_id)
+
+    if request.method == 'POST':
+        workout.pushups = request.form.get('pushups')
+        workout.comment = request.form.get('comment')
+
+        db.session.commit()
+
+        return redirect(url_for('main.all_workouts'))
+
+    return render_template('update_workout.html', workout=workout)
+
+
+@main.route("/workout/<int:workout_id>/delete", methods=['GET'])
+@login_required
+def delete_workout(workout_id):
+    workout = Workout.query.get_or_404(workout_id)
+
+    db.session.delete(workout)
+    db.session.commit()
+
+    return redirect(url_for('main.all_workouts'))

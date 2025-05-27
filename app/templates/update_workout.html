@@ -1,0 +1,36 @@
+{% extends "base.html" %} {% block head %} {{ super() }} {% endblock %} {% block
+content %}
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Update Workout</h5>
+    <form
+      action="{{ url_for('main.update_workout', workout_id=workout.id) }}"
+      method="post"
+    >
+      <div class="mb-3">
+        <label for="pushups" class="form-label">Push-ups</label>
+        <input
+          type="number"
+          class="form-control"
+          id="pushups"
+          name="pushups"
+          placeholder="Enter number of push-ups"
+          value="{{ workout.pushups }}"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="comment" class="form-label">Comment</label>
+        <input
+          type="text"
+          class="form-control"
+          id="comment"
+          name="comment"
+          placeholder="Enter comment"
+          value="{{ workout.comment }}"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Update Workout</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
