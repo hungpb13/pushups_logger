@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, url_for, redirect
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_user, logout_user, login_required
 from .models import User
 from . import db
 
@@ -37,16 +38,28 @@ def login():
 def login_post():
     email = request.form.get('email')
     password = request.form.get('password')
+    remember = True if request.form.get('remember') else False
 
-    print(email, password)
+    print(email, password, remember)
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user or not check_password_hash(user.password, password):
+        print("Email or password is NOT valid!")
+        return redirect(url_for('auth.login'))
+    
+    login_user(user=user, remember=remember)
 
     return redirect(url_for('main.profile'))
 
 @auth.route("/logout")
+@login_required
 def logout():
-    return "Logout"
+    logout_user()
+    return redirect(url_for('main.index'))
 
 @auth.route("/users")
+@login_required
 def users():
     users = User.query.all()
 
